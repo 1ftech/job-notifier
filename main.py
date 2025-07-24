@@ -1,19 +1,27 @@
 from scrapers.stepstone import scrape_stepstone
 from scrapers.indeed import scrape_indeed
+# from scrapers.linkedin import scrape_linkedin  # if implemented
 from notifier.email_notifier import send_email
 
+
 def main():
-    keywords = ["Data Analyst", "Data Engineer", "Data Scientist", "AI Engineer", "ML Engineer"]
-    location = "Berlin"
+    print("Scraping StepStone...")
+    stepstone_jobs = scrape_stepstone()
 
-    jobs_stepstone = scrape_stepstone(keywords, location)
-    jobs_indeed = scrape_indeed(keywords, location)
+    print("Scraping Indeed...")
+    indeed_jobs = scrape_indeed()
 
-    all_jobs = jobs_stepstone + jobs_indeed
-    if all_jobs:
-        send_email(all_jobs)
-    else:
-        print("No new jobs found today.")
+    # print("Scraping LinkedIn...")
+    # linkedin_jobs = scrape_linkedin()
+
+    all_jobs = {
+        "StepStone": stepstone_jobs,
+        "Indeed": indeed_jobs,
+        # "LinkedIn": linkedin_jobs
+    }
+
+    send_email(all_jobs)
+
 
 if __name__ == "__main__":
     main()
